@@ -4,9 +4,9 @@ import sys
 import json
 
 from gcp_utils import utils as common_utils
-from firewall_inspector import service as fw_service 
-from iam_scanner import service as iam_service
-from cost_reporter import service as bq_service
+from gcp_services_tools.firewall_inspector import service as fw_service 
+from gcp_services_tools.iam_scanner import service as iam_service
+from gcp_services_tools.cost_reporter import service as bq_service
 
 def main():
     parser = argparse.ArgumentParser(
