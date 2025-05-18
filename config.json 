@@ -1,0 +1,101 @@
+{
+  "project_id": "your-gcp-sandbox-project-id",
+  "firewall_inspector": {
+    "permissive_protocols": ["all"],
+    "permissive_tcp_ports": ["1-65535", "22", "3389", "80", "443"],
+    "permissive_udp_ports": ["1-65535"]
+  },
+  "bigquery": {
+    "sample_queries": [
+      "SELECT COUNT(*) FROM `bigquery-public-data.stackoverflow.users` WHERE reputation > 10000",
+      "SELECT repository_language, COUNT(commit) as num_commits FROM `bigquery-public-data.github_repos.commits` WHERE EXTRACT(YEAR FROM author.date) = 2023 GROUP BY 1 ORDER BY 2 DESC LIMIT 5",
+      "SELECT SUM(word_count) AS total_word_count, APPROX_TOP_COUNT(corpus, 1)[OFFSET(0)].value AS most_frequent_corpus FROM `bigquery-public-data.samples.shakespeare`"
+    ],
+    "num_runs_per_query": 1,
+    "query_log_file": "cost_reporter/query_execution_log.json"
+  }
+}
+
+// config.sample.json
+{
+  "project_id": "your-gcp-sandbox-project-id",
+  "firewall_inspector": {
+    "source_ip_alert": "0.0.0.0/0",
+    "flag_ingress_only": true,
+    "target_tags_to_ignore": ["allow-all-for-testing"], // Optional: ignore rules with these target tags
+    "target_service_accounts_to_ignore": ["test-sa@*.iam.gserviceaccount.com"], // Optional: ignore rules with these SAs
+    "permissive_rules_details": [
+      {
+        "protocol": "all", // "all" means any protocol
+        "ports": [] // Empty list for "all" protocol means all ports
+      },
+      {
+        "protocol": "icmp",
+        "ports": [] // For ICMP, ports are not typically specified in this way, but an empty list means any type/code
+      },
+      {
+        "protocol": "tcp",
+        "ports": ["1-65535", "22", "3389", "80", "443"] // "1-65535" or a list of specific sensitive ports
+      },
+      {
+        "protocol": "udp",
+        "ports": ["1-65535"]
+      }
+    ]
+  },
+  "iam_scanner": {
+    // ... to be defined later
+  },
+  "bigquery": {
+    // ... to be defined later
+    "query_log_file": "cost_reporter/query_execution_log.json"
+  }
+}
+
+// config.sample.json
+{
+  "project_id": "your-gcp-sandbox-project-id", // Used by BigQuery client, among others
+  "firewall_inspector": {
+    "source_ip_alert": "0.0.0.0/0",
+    "flag_ingress_only": true,
+    "permissive_rules_details": [
+      // ... (previous settings) ...
+    ]
+  },
+  "iam_scanner": {
+    // ... (to be defined later) ...
+  },
+  "bigquery": { // Configuration for Case 3: GCP Cost Breakdown Reporter
+    "query_log_file": "cost_reporter/query_execution_log.json", // File to log our script's query executions
+    "num_runs_per_query_set": 2, // How many times to run the ENTIRE set of sample_queries in one script execution
+    "sample_queries": [ // List of sample SQL queries to run against public datasets
+      "SELECT COUNT(1) FROM `bigquery-public-data.stackoverflow.users` WHERE reputation > 10000 AND location LIKE '%Brazil%'",
+      "SELECT repository_language, COUNT(commit) as num_commits FROM `bigquery-public-data.github_repos.commits` WHERE EXTRACT(YEAR FROM author.date) = 2023 GROUP BY 1 ORDER BY 2 DESC LIMIT 3",
+      "SELECT year, month, AVG(mean_temp) AS avg_monthly_temp FROM `bigquery-public-data.gsod.summary` WHERE station_name = 'DEW POINT, NETHERLANDS' AND year >= 2023 GROUP BY 1, 2 ORDER BY 1 DESC, 2 DESC LIMIT 5"
+    ]
+  }
+}
+
+
+{
+  "project_id": "your-gcp-sandbox-project-id",
+  "firewall_inspector": {
+    // ... (previous settings for Case 1) ...
+  },
+  "iam_scanner": { // Configuration for Case 2: IAM Policy Scanner
+    "roles_to_flag": [
+      "roles/storage.admin"
+    ],
+    "members_to_flag": [
+      "allUsers",
+      "allAuthenticatedUsers"
+    ],
+    "buckets_to_ignore": [ // Optional: list of bucket names to skip during the scan
+        // "my-public-but-explicitly-ignored-bucket",
+        // "another-special-case-bucket"
+    ]
+  },
+  "bigquery": {
+    // ... (settings for Case 3) ...
+  }
+}

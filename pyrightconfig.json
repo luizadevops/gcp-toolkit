@@ -1,0 +1,6 @@
+{
+    "typeCheckingMode": "basic",
+    "reportMissingTypeStubs": false,
+    "useLibraryCodeForTypes": true,
+    "reportGeneralTypeIssues": "warning"
+}
