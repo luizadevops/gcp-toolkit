@@ -2,17 +2,17 @@
 
 This Python tool is a submission for the GCP Cloud Engineer coding challenge. It performs several auditing and reporting tasks on a Google Cloud Platform (GCP) project, broken down into three main cases:
 
-1.  **Case 1: Firewall Rule Inspector & Cleaner**
+1.  **Firewall Rule Inspector & Cleaner**
     * Lists all VPC firewall rules in a GCP project.
     * Flags rules that allow overly permissive ingress (e.g., from `0.0.0.0/0` to sensitive ports) based on a configurable definition.
     * Optionally deletes flagged rules (with `--delete` flag, supports `--dry-run`).
 
-2.  **Case 2: IAM Policy Scanner**
+2.  **IAM Policy Scanner**
     * Lists IAM policies for all Cloud Storage buckets in the GCP project.
     * Flags policies granting `roles/storage.admin` to `allUsers` or `allAuthenticatedUsers`.
     * Suggests a remediation plan for flagged policies.
 
-3.  **Case 3: GCP Query Count Reporter**
+3.  **GCP Query Count Reporter**
     * Runs a predefined set of sample queries against BigQuery public datasets multiple times.
     * Logs each query execution timestamp to a local file.
     * Aggregates these query counts per day for the past 7 days.
