@@ -2,7 +2,7 @@ import logging
 from google.cloud import compute_v1
 from google.api_core import exceptions as google_exceptions
 from google.cloud.compute_v1.types import Firewall
-from gcp_utils.clients import get_compute_client
+from gcp_utils.clients import get_firewalls_client
 from typing import Sequence
 
 def check_ports_match(rule_ports: Sequence[str], config_ports: list[str]) -> bool:
@@ -31,7 +31,7 @@ def check_ports_match(rule_ports: Sequence[str], config_ports: list[str]) -> boo
 
 def list_firewall_rules(project_id: str) -> list[Firewall]:
 
-    client = get_compute_client()
+    client = get_firewalls_client()
     firewalls_list: list[Firewall] = []
     try:
         request = compute_v1.ListFirewallsRequest(project=project_id)
@@ -88,7 +88,7 @@ def is_rule_overly_permissive(rule: Firewall, fw_config: dict) -> tuple[bool, st
 
 def delete_firewall_rule(project_id: str, rule_name: str, dry_run: bool = True) -> bool:
 
-    client = get_compute_client()
+    client = get_firewalls_client()
 
     if dry_run:
         logging.info(f"[DRY-RUN] Would delete firewall rule: '{rule_name}' in project '{project_id}'.")

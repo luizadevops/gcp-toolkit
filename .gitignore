@@ -1,5 +1,0 @@
-venv/
-__pycache__/
-*.pyc
-config.json
-cost_reporter/query_execution_log.json

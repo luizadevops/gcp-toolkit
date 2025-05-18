@@ -10,10 +10,7 @@ def setup_logging(level=logging.INFO, verbose=False):
         format='%(asctime)s - %(levelname)s - [%(module)s.%(funcName)s:%(lineno)d] - %(message)s',
         handlers=[logging.StreamHandler(sys.stdout)]
     )
-    # Example: Quieten overly verbose library logs if needed
-    # logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
     logging.debug("Logging setup complete.")
-
 
 def load_config(config_path: str) -> dict:
     try:
