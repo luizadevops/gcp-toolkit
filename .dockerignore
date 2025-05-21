@@ -9,7 +9,6 @@ venv/
 .git/
 .gitignore
 *.DS_Store
-config.json # We will mount the actual config.json at runtime, not build it into the image
-cost_reporter/query_execution_log.json # Don't include local log files in the image
+config.json
 *.db
 *.sqlite3

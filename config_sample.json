@@ -1,0 +1,55 @@
+{
+  "project_id": "change-for-your-gcp-project-id-here",
+  "firewall_inspector": {
+    "source_ip_alert": "0.0.0.0/0",
+    "flag_ingress_only": true,
+    "target_tags_to_ignore": [],
+    "target_service_accounts_to_ignore": [],
+    "permissive_rules_details": [
+      {
+        "protocol": "all",
+        "ports": []
+      },
+      {
+        "protocol": "icmp",
+        "ports": []
+      },
+      {
+        "protocol": "tcp",
+        "ports": [
+          "1-65535",
+          "22",
+          "3389",
+          "23",
+          "3306",
+          "5432",
+          "27017",
+          "1433"
+        ]
+      },
+      {
+        "protocol": "udp",
+        "ports": [
+          "1-65535",
+          "53"
+        ]
+      }
+    ]
+  },
+  "iam_scanner": {
+    "roles_to_flag": [
+      "roles/storage.admin"
+    ],
+    "members_to_flag": [
+      "allUsers",
+      "allAuthenticatedUsers"
+    ],
+    "buckets_to_ignore": []
+  },
+  "bigquery_cost_reporter": {
+    "reporting_region": "US",
+    "report_days_history": 7,
+    "information_schema_table_template": "`{project_id}.{dataset_region_part}.INFORMATION_SCHEMA.JOBS_BY_PROJECT`",
+    "information_schema_query_template": "SELECT\n    DATE(creation_time) AS job_date,\n    COUNT(*) AS num_queries,\n    SUM(COALESCE(total_bytes_billed, 0)) AS total_bytes_billed_for_queries\nFROM\n    {info_schema_table_name}\nWHERE\n    creation_time BETWEEN TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @num_report_days DAY) AND CURRENT_TIMESTAMP()\n    AND job_type = 'QUERY'\n    AND parent_job_id IS NULL \n    AND error_result IS NULL \nGROUP BY\n    job_date\nORDER BY\n    job_date DESC"
+  }
+}

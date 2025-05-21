@@ -1,78 +1,66 @@
-# GCP Cloud Engineer Challenge Tool
+# GCP Services Toolkit
 
-This Python tool is a submission for the GCP Cloud Engineer coding challenge. It performs several auditing and reporting tasks on a Google Cloud Platform (GCP) project, broken down into three main cases:
+This Python toolkit performs several auditing and reporting tasks on a Google Cloud Platform (GCP) project.
 
-1.  **Firewall Rule Inspector & Cleaner**
-    * Lists all VPC firewall rules in a GCP project.
-    * Flags rules that allow overly permissive ingress (e.g., from `0.0.0.0/0` to sensitive ports) based on a configurable definition.
-    * Optionally deletes flagged rules (with `--delete` flag, supports `--dry-run`).
+The toolkit currently supports the following tools (all run by default):
 
-2.  **IAM Policy Scanner**
+1.  **Firewall Rule Inspector & Cleaner Tool**
+    * Lists all VPC firewall rules in the GCP project.
+    * Flags rules that allow overly permissive ingress (e.g., from `0.0.0.0/0` to sensitive ports) based on configurable criteria in `config.json`.
+    * If the `--delete` flag is used, it can delete flagged rules.
+    * Supports a `--dry-run` mode to simulate changes without making them.
+
+2.  **IAM Policy Scanner Tool**
     * Lists IAM policies for all Cloud Storage buckets in the GCP project.
-    * Flags policies granting `roles/storage.admin` to `allUsers` or `allAuthenticatedUsers`.
-    * Suggests a remediation plan for flagged policies.
+    * Flags policies that grant highly permissive roles (e.g., `roles/storage.admin`) to public principals (`allUsers` or `allAuthenticatedUsers`), based on the `config.json` configuration file.
+    * Suggests a remediation plan.
 
-3.  **GCP Query Count Reporter**
-    * Runs a predefined set of sample queries against BigQuery public datasets multiple times.
-    * Logs each query execution timestamp to a local file.
-    * Aggregates these query counts per day for the past 7 days.
-    * Outputs a summary identifying the total queries per day and the busiest day.
-
-The tool is designed to be modular, configurable via a JSON file, and provides clear logging output.
+3.  **GCP BigQuery Count Reporter Tool**
+    * Analyzes actual BigQuery job history for the configured GCP project and reporting region by querying its `INFORMATION_SCHEMA.JOBS_BY_PROJECT` view.
+    * Aggregates the total number of queries executed and the total bytes billed by these queries on a per-day basis for a configurable period (e.g., the past 7 days, as set in `config.json`).
+    * Outputs a daily summary to the log, including the number of queries and the volume of bytes billed.
+    * Identifies the "busiest day" within the reported period based on the highest number of queries.
 
 ## Prerequisites
 
-* Python 3.8 or higher.
+* Python 3.9 or higher (due to type hints like `str | None`). If using older Python (3.8), adjust type hints to use `Optional[str]` from `typing`.
 * `gcloud` CLI installed and authenticated:
-    * Run `gcloud auth application-default login` to set up Application Default Credentials.
+    * Run `gcloud auth application-default login` for Application Default Credentials.
 * The following GCP APIs must be enabled on the target project:
     * Compute Engine API (`compute.googleapis.com`)
-    * Cloud Storage API (`storage.googleapis.com`)
+    * Cloud Storage API (`storage.googleapis.com`) & IAM API (`iam.googleapis.com`)
     * BigQuery API (`bigquery.googleapis.com`)
-    * IAM API (`iam.googleapis.com`)
-    * Service Usage API (`serviceusage.googleapis.com`) - (for enabling other APIs or if the script needs to check)
+    * Service Usage API (`serviceusage.googleapis.com`) (generally needed for projects)
 
 ## Setup Instructions
 
-1.  **Clone the Repository (or Unpack Files):**
-    If this project is in a Git repository, clone it. Otherwise, ensure all project files (`main.py`, `config.sample.json`, `requirements.txt`, and the package directories: `firewall_inspector/`, `iam_scanner/`, `cost_reporter/`, `gcp_utils/`) are in a single root directory.
+1.  **Project Directory:**
+    Ensure all project files (`main.py`, `tools.py`, `config.sample.json`, `requirements.txt`) are in a single root directory.
 
-2.  **Create and Activate a Python Virtual Environment (Recommended):**
+2.  **Virtual Environment (Recommended):**
     ```bash
     python -m venv venv
     ```
-    Activate the environment:
-    * Linux/macOS:
-        ```bash
-        source venv/bin/activate
-        ```
-    * Windows (Command Prompt):
-        ```bash
-        venv\Scripts\activate.bat
-        ```
-    * Windows (PowerShell):
-        ```bash
-        venv\Scripts\Activate.ps1
-        ```
+    Activate:
+    * Linux/macOS: `source venv/bin/activate`
+    * Windows: `venv\Scripts\activate`
 
 3.  **Install Dependencies:**
-    With the virtual environment activated, install the required Python packages:
     ```bash
     pip install -r requirements.txt
     ```
 
 4.  **Configure the Tool:**
-    * Copy the sample configuration file:
+    * Copy `config.sample.json` to `config.json`:
         ```bash
-        cp config.sample.json config.json
+        cp config.sample.json config.json # Linux/macOS
+        # copy config.sample.json config.json # Windows
         ```
-        (On Windows, use `copy config.sample.json config.json`)
-    * Edit `config.json` and **set your `project_id`**. Review and adjust other settings for each case as needed (e.g., sample BigQuery queries, firewall permissive criteria, etc.).
+    * **Edit `config.json`**: Crucially, set your `project_id`. Review and adjust other settings for each tool's section as needed.
 
 ## Running the Tool
+All commands are run from the project's root directory with the virtual environment activated. The script will execute all registered tools by default.
 
-All commands should be run from the root directory of the project, with your virtual environment activated.
-
-**Basic Command Structure:**
+**Command Line Interface:**
 ```bash
-python main.py --config ./config.json [options]
+python main.py --config ./config.json [--delete] [--dry-run]
