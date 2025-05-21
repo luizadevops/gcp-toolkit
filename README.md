@@ -30,7 +30,7 @@ The toolkit currently supports the following tools (all run by default):
     * Compute Engine API (`compute.googleapis.com`)
     * Cloud Storage API (`storage.googleapis.com`) & IAM API (`iam.googleapis.com`)
     * BigQuery API (`bigquery.googleapis.com`)
-    * Service Usage API (`serviceusage.googleapis.com`) (generally needed for projects)
+    * Service Usage API (`serviceusage.googleapis.com`)
 
 ## Setup Instructions
 
