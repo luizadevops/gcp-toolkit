@@ -54,7 +54,7 @@ The toolkit currently supports the following tools (all run by default):
     * Copy `config.sample.json` to `config.json`:
         ```bash
         cp config.sample.json config.json # Linux/macOS
-        # copy config.sample.json config.json # Windows
+        copy config.sample.json config.json # Windows
         ```
     * **Edit `config.json`**: Crucially, set your `project_id`. Review and adjust other settings for each tool's section as needed.
 
