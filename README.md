@@ -2,7 +2,8 @@
 
 This Python toolkit performs several auditing and reporting tasks on a Google Cloud Platform (GCP) project.
 
-# File Tree
+## File Tree
+```
 .
 ├── Dockerfile
 ├── README.md
@@ -25,8 +26,8 @@ This Python toolkit performs several auditing and reporting tasks on a Google Cl
 │   └── utils.py
 ├── main.py
 └── requirements.txt
-
-The toolkit currently supports the following tools (all run by default):
+```
+### The toolkit currently supports the following tools (all run by default):
 
 1.  **Firewall Rule Inspector & Cleaner Tool**
     * Lists all VPC firewall rules in the GCP project.
