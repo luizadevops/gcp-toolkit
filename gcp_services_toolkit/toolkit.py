@@ -15,6 +15,10 @@ class ToolConfig:
 
 class Tool(ABC):
     @abstractmethod
+    def get_tool_config(self) -> ToolConfig:
+        pass    
+     
+    @abstractmethod
     def run(self, 
             project_id: str, 
             global_config: Dict[str, Any],
@@ -22,9 +26,7 @@ class Tool(ABC):
             global_delete_flag: bool) -> None:
         pass
 
-    @abstractmethod
-    def get_tool_config(self) -> ToolConfig:
-        pass
+
 
 
 class FirewallInspectorTool(Tool):
