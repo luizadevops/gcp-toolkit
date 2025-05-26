@@ -2,6 +2,30 @@
 
 This Python toolkit performs several auditing and reporting tasks on a Google Cloud Platform (GCP) project.
 
+# File Tree
+.
+├── Dockerfile
+├── README.md
+├── config_sample.json
+├── gcp_services_toolkit
+│   ├── __init__.py
+│   ├── cost_reporter
+│   │   ├── __init__.py
+│   │   └── service.py
+│   ├── firewall_inspector
+│   │   ├── __init__.py
+│   │   └── service.py
+│   ├── iam_scanner
+│   │   ├── __init__.py
+│   │   └── service.py
+│   └── toolkit.py
+├── gcp_utils
+│   ├── __init__.py
+│   ├── clients.py
+│   └── utils.py
+├── main.py
+└── requirements.txt
+
 The toolkit currently supports the following tools (all run by default):
 
 1.  **Firewall Rule Inspector & Cleaner Tool**
