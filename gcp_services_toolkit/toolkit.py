@@ -27,8 +27,6 @@ class Tool(ABC):
         pass
 
 
-
-
 class FirewallInspectorTool(Tool):
     def get_tool_config(self) -> ToolConfig:
         return ToolConfig(
