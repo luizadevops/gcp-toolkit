@@ -85,7 +85,7 @@ def is_rule_overly_permissive(rule: Firewall, fw_config_params: Dict) -> Tuple[b
                 return True, f"Allows {protocol.upper()} on ALL ports (as per empty 'ports' in config for protocol '{criterion_dict.get('protocol')}') from '{source_ip_alert}'."
             if check_ports_match(rule_ports, config_ports_for_criterion):
                 return True, (f"Allows {protocol.upper()} on ports ({rule_ports if rule_ports else 'ALL'}) "
-                              f"from '{source_ip_alert}' which match configured permissive ports "
+                              f"from '{source_ip_alert}' which match configured permissive ports to flag"
                               f"'{config_ports_for_criterion}' for criterion protocol '{criterion_dict.get('protocol')}'.")
     return False, ""
 
