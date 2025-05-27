@@ -55,7 +55,6 @@ This Python toolkit performs several auditing and reporting tasks on a Google Cl
     * Compute Engine API (`compute.googleapis.com`)
     * Cloud Storage API (`storage.googleapis.com`) & IAM API (`iam.googleapis.com`)
     * BigQuery API (`bigquery.googleapis.com`)
-    * Service Usage API (`serviceusage.googleapis.com`)
 
 ## Setup Instructions
 
