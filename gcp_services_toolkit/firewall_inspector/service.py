@@ -51,7 +51,7 @@ def is_rule_overly_permissive(rule: Firewall, fw_config_params: Dict) -> Tuple[b
     target_tags_to_ignore = set(fw_config_params.get("target_tags_to_ignore", []))
     target_sas_to_ignore = set(fw_config_params.get("target_service_accounts_to_ignore", []))
 
-    if flag_ingress_only and rule.direction == Firewall.Direction.INGRESS.name:
+    if flag_ingress_only and rule.direction != Firewall.Direction.INGRESS.name:
         return False, ""
 
     if source_ip_alert not in rule.source_ranges:
